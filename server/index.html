@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<title>IOT - GPS</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://unpkg.com/popper.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+		<script src="socket.io/socket.io.js"></script>
+		<script src="js/patientView.js"></script>
+		<script>
+			// Initialise the game
+			init();
+			onSocketConnected();
+		</script>
+
+		
+		<style>
+			.bg-cover {
+					background-image: url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/JrbItQz/navigation-city-map-and-icons-animation_vklihvy7e__F0000.png');
+					background-repeat: no-repeat;
+					background-size: cover; /* Resize the background image to cover the entire container */
+					}
+					h1{
+					color: black;
+					}
+		</style>
+</head>
+<body>
+		<nav class="navbar fixed-top navbar-expand-md navbar-light bg-light">
+				<div class="container">
+					<a class="navbar-brand" href="index.html">PATIENT SUPERVISOR</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+					<div class="collapse navbar-collapse" id="navbarCollapse">
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item active">
+								<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+	<div class="back bg-cover">
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+        <h1 align="center" class="display-4 center"><strong>Keep your patient sure</strong></h1>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+	</div>
+	<br/>
+	<div class="table-responsive">
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">NAME</th>
+      <th scope="col">LATITUD</th>
+      <th scope="col">LONGITUD</th>
+      <th scope="col">OK</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+  </table>
+</div>
+<br/>
+<br/>
+<footer class="container mt-4">
+	<div class="row">
+		<div class="col">
+			<p class="text-center"><b>Sorbonne Universit&eacute</b></a></p>
+			<p class="text-center"><b>Juan Dahl - juan.dahl@etu.upmc.fr</b></a></p>
+		</div>
+	</div>
+</footer>
+
+</body>
+</html>
