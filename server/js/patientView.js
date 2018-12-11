@@ -40,20 +40,38 @@ function onSocketConnected() {
 };
 
 
-function showPatients(patients) {
-	console.log(patients[0].id + "\t" + patients[0].name + "\t" + patients[0].lat + "\t" + patients[0].lng + "\t" + patients[0].OK);
+function showPatients(patients) {    
+	var html = "  <thead>"
+	html += "      <th scope=\"col\">ID</th>";
+	html += "      <th scope=\"col\">NAME</th>";
+	html += "      <th scope=\"col\">LATITUD</th>";
+	html += "      <th scope=\"col\">LONGITUD</th>";
+	html += "      <th scope=\"col\">OK</th>";
+
+	html += "</tr>";
+	html += "</thead>";
+	for (var i = 0; i < patients.length; i++) {
+		html+="<tr>";
+		html+="<td>"+patients[i].id+"</td>";
+		html+="<td>"+patients[i].name+"</td>";
+		html+="<td>"+patients[i].lat+"</td>";
+		html+="<td>"+patients[i].lng+"</td>";
+		html+="<td>"+patients[i].OK+"</td>";
+		html+="</tr>";
+
+	}
+	html+="</table>";
+	document.getElementById("tablePat").innerHTML = html;
+
+	console.log(patients.id + "\t" + patients.name + "\t" + patients.lat + "\t" + patients.lng + "\t" + patients.OK);
+//	console.log(patients[0].id + "\t" + patients[0].name + "\t" + patients[0].lat + "\t" + patients[0].lng + "\t" + patients[0].OK);
 };
 
 
 // New player
-function onNewPatient(data) {
-	console.log("New player connected: "+data.id);
-
-	// Question : Initialise the new player
-
-	//create new player and after add it to the list
-	var newPlayer = (data.nom, data.x, data.y, data.dirAngle, data.id);
-	remotePlayers.push(newPlayer);
+function onNewPatient(patient) {
+	patients.push(patient);
+	showPatients(patients)
 
 };
 

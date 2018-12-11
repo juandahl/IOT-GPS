@@ -7,7 +7,9 @@ var util = require("util"),
     io = require("socket.io"),	
     repo = require('./repository');
 
-
+module.exports = {
+  addPatient: addPatient,
+};
 
 // APP VARIABLES
 var socket,	// Socket controller
@@ -34,9 +36,6 @@ function init() {
 	server.listen(8000);
 
 
-//VER SI SE USA
-//	app.use(express.static(__dirname+"/public")); 
-
 	// Start listening for events
 	setEventHandlers(); //fonction magic
 	console.log("server of monitoring started");
@@ -50,6 +49,8 @@ var setEventHandlers = function() {
 	socket.on("connection", onSocketConnection);
 	// Listen for a request message
 	socket.on("getPatients", onGetPatients);
+	socket.on("add Patients", addPatient);
+
 };
 
 // New socket connection
@@ -59,27 +60,29 @@ function onSocketConnection(client) {
 	console.log("New superviser has connected: ");
 
 	//get all the patients	
-	onGetPatients();
+	patients = onGetPatients();
 
-	console.log(patients.length);
 	//send to client the list of patients
 	this.emit("show Patients", patients);
-
 };
+
+function addPatient(patient) {
+	console.log(patient);
+	patients.push(patient);
+	this.broadcast.emit("show Patients", patients);
+}
 
 
 function onGetPatients() {
-	repo.openDB();
+	patients = [];
 	patients = repo.getPatients();
-	console.log(patients.length);
-	repo.close();
 	return patients; 
 };
 
 
 // GAME HELPER FUNCTIONS
 
-
-
 // RUN THE GAME
 init();
+
+

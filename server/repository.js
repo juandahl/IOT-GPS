@@ -15,7 +15,6 @@ const sqlite3 = require('sqlite3').verbose();
 var db;
 var pathDB = "db/database.db";
 
-
 function openDB(){
   // open the database
   db = new sqlite3.Database(pathDB, sqlite3.OPEN_READWRITE, (err) => {
@@ -27,22 +26,21 @@ function openDB(){
 
 }
  
-function getPatients(){
-  var patients = [];
-  var number;
-  //get data
-
-
-
-  db.serialize(function(){
-   db.each('SELECT * FROM Patients;', function(err, row){
-      patients.push(row);
-   }, function(err, rowCount){
-      console.log(patients);
-   });
-  });
-  console.log(patients);
-  return patients;
+function getPatients(arg){
+    var listePatients=[];
+/*    openDB();
+    db.each("SELECT * FROM Patients", function(err, row) {
+        if (err) {
+            console.log(err);
+        } else {
+          this.emit("new patient", row);
+          listePatients.push(row);
+        }
+    });
+    close();
+    console.log(listePatients.length);*/
+    return [{ id: 3, name: 'Pepe', lat: 2.2, lng: 2.1, OK: 1 },
+    { id: 1, name: 'Pepe', lat: 2.2, lng: 2.1, OK: 1 }];    
 }
 
 
@@ -71,5 +69,3 @@ function close(){
     console.log('Close the database connection.');
   });
 }
-
-
