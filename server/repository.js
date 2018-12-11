@@ -11,6 +11,10 @@ module.exports = {
 
 //function implementation
 const sqlite3 = require('sqlite3').verbose();
+const Promise = require('bluebird');
+
+
+var server = require('./server');
 
 var db;
 var pathDB = "db/database.db";
@@ -25,26 +29,27 @@ function openDB(){
   });
 
 }
- 
-function getPatients(arg){
-    var listePatients=[];
-/*    openDB();
-    db.each("SELECT * FROM Patients", function(err, row) {
+
+function getPatients(){
+    listePatients = [];
+    openDB();
+    sql = "SELECT * FROM Patients";
+
+    return new Promise(function(resolve, reject) {
+      // Do async job
+      db.all(sql, function(err, rows) {
         if (err) {
-            console.log(err);
-        } else {
-          this.emit("new patient", row);
-          listePatients.push(row);
-        }
-    });
-    close();
-    console.log(listePatients.length);*/
-    return [{ id: 3, name: 'Pepe', lat: 2.2, lng: 2.1, OK: 1 },
-    { id: 1, name: 'Pepe', lat: 2.2, lng: 2.1, OK: 1 }];    
+          reject(err);
+      } else {
+        resolve(rows);
+        return rows;  
+      }
+      });
+    }); 
 }
 
 
-function insertPatient(patient){
+function insertPatient(patient, addPatient){
   //insert data
   request = 'INSERT INTO Patients(id, name, lat, lng, OK) VALUES('+ patient.id + ', \'' + patient.name + '\', ' 
 		+ patient.lat + ', ' + patient.lng + ', ' + patient.OK +  ');' 
@@ -56,6 +61,7 @@ function insertPatient(patient){
     }
     // get the last insert id
     console.log(`A row has been inserted with rowid ${patient.id}`);
+    addPatient(patient);
   });
 }
 

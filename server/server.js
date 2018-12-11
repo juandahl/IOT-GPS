@@ -56,33 +56,42 @@ var setEventHandlers = function() {
 // New socket connection
 function onSocketConnection(client) {
 
-//	console.log("New superviser has connected: "+client.constructor.name);
 	console.log("New superviser has connected: ");
 
 	//get all the patients	
 	patients = onGetPatients();
 
-	//send to client the list of patients
-	this.emit("show Patients", patients);
+	patients = [];
 };
 
 function addPatient(patient) {
 	console.log(patient);
 	patients.push(patient);
-	this.broadcast.emit("show Patients", patients);
+	socket.emit("show Patients", patients);
 }
 
 
 function onGetPatients() {
 	patients = [];
-	patients = repo.getPatients();
-	return patients; 
+	var promise1 = repo.getPatients();
+
+	promise1.then(function(result) {
+		patients = result;
+		//send to client the list of patients
+		socket.emit("show Patients", patients);
+	});
 };
 
 
 // GAME HELPER FUNCTIONS
-
+function sleep(milliseconds) {
+	var start = new Date().getTime();
+	for (var i = 0; i < 1e7; i++) {
+	  if ((new Date().getTime() - start) > milliseconds){
+		break;
+	  }
+	}
+  }
+  
 // RUN THE GAME
 init();
-
-
