@@ -14,7 +14,7 @@ const sqlite3 = require('sqlite3').verbose();
 const Promise = require('bluebird');
 
 
-var server = require('./server');
+var server = require('./serverSupervisor');
 
 var db;
 var pathDB = "db/database.db";
@@ -49,7 +49,7 @@ function getPatients(){
 }
 
 
-function insertPatient(patient, addPatient){
+function insertPatient(patient){
   //insert data
   request = 'INSERT INTO Patients(id, name, lat, lng, OK) VALUES('+ patient.id + ', \'' + patient.name + '\', ' 
 		+ patient.lat + ', ' + patient.lng + ', ' + patient.OK +  ');' 
@@ -60,8 +60,7 @@ function insertPatient(patient, addPatient){
       return console.log(err.message);
     }
     // get the last insert id
-    console.log(`A row has been inserted with rowid ${patient.id}`);
-    addPatient(patient);
+    console.log('A row has been inserted with rowid ${patient.id}');
   });
 }
 
