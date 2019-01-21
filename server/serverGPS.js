@@ -4,16 +4,19 @@ var util = require("util"),
     express = require("express"),
     app = express(),
     http = require("http"),
-    io = require("socket.io"),	
+	io = require("socket.io"),
+	Patient = require("./Patient").Patient,
     repo = require('./repository');
 
 
 // APP VARIABLES
 var socket;	// Socket controller
-
+var patients;
 
 // APP INITIALISATION
 function init() {
+	patients = [];
+
 	server=http.createServer(app); //crea el server
 	// Set up Socket.IO to listen on port 8000
 	socket = io.listen(server); //permite usar websocket
@@ -40,23 +43,36 @@ var setEventHandlers = function() {
 	// Socket.IO
 	//funcion callback es llamada cada vez que un cliente se conecta
 	socket.on("connection", onSocketConnection);
-	//add a new Patient
-	socket.on("add Patients", addPatient);
 
 };
 
 // New socket connection
 function onSocketConnection(client) {
-
 	console.log("New Patient has connected: ");
+
+	// Listen for new player message
+	client.on("new patient", onNewPatient);
 
 };
 
-function addPatient(patient) {
+// New player has joined
+function onNewPatient(data) {
+	// Create a new player
+	var newPatient = new Patient(data.name, data.lastName, data.lat, data.lng, data.polygon, data.OK);
+
+	console.log("onNewPatient");
+	console.log(data.name);
+		
+	// Add new player to the players array
 	console.log(patient);
 	patients.push(patient);
+
+	//insert on the database
 	repo.insertPatient(patient);
-}
+
+	patients.push(newPatient);
+};
+
 
  
 // RUN THE GAME

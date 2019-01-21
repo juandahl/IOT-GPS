@@ -60,15 +60,22 @@
 				</div>
 		</div>
 		<br/>
+		<div class="row">
+			<div class="col">
+				<input id="Inside" readonly= "true" type="text" class="form-control" placeholder="Inside">
+			</div>
+		</div>
+		<br/>
 
 		<div class="col-auto">
 		</div>
 		<br/>
 	
 		<div class="col-auto">
+			<button type="submit" class="btn btn-primary mb-2" onclick="setLocation(); return false">Patient Location</button>
 			<button type="submit" class="btn btn-primary mb-2" onclick="showPolygon(); return false">Create Polygon</button>
-			<button type="submit" class="btn btn-primary mb-2">Clean Polygon</button>
-			<button type="submit" class="btn btn-primary mb-2">Send</button>
+			<button type="submit" class="btn btn-primary mb-2" >Clean</button>
+			<button type="submit" class="btn btn-primary mb-2" onclick="send();">Send</button>
 		</div>
 	
 	</form>
@@ -78,22 +85,51 @@
 		console.log(JSON.stringify(listePointsPolygone));
 		console.log("polygone a creer");
 		L.polygon([listePointsPolygone]).addTo(mymap);
-	}
-	var listePointsPolygone=[];
+	};
 
-	document.addEventListener('keydown', (event) => {
-  	const nomTouche = event.key;
+	function inside(point, vs) {
+		// ray-casting algorithm based on
+		// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
 
-  	console.log("("+nomTouche+")");
-  	if (nomTouche=='p')
-	{
+		var x = point.lat, y = point.lng;
+
+		var inside = false;
+		for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+			var xi = vs[i].lat, yi = vs[i].lng;
+			var xj = vs[j].lat, yj = vs[j].lng;
+
+			var intersect = ((yi > y) != (yj > y))
+				&& (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+			if (intersect) inside = !inside;
+		}
+		console.log("inside: " + inside); 
+		if (inside) 
+			document.getElementById("Inside").value = "Inside";
+		else
+			document.getElementById("Inside").value = "Outside";
+	};
+
+
+
+	function setLocation(){
+		var pos = listePointsPolygone[listePointsPolygone.length-1];
+		listePointsPolygone.pop(listePointsPolygone.length-1);
+
+		inside(pos, listePointsPolygone);
+
 		console.log(JSON.stringify(listePointsPolygone));
 		console.log("polygone a creer");
 		L.polygon([listePointsPolygone]).addTo(mymap);
-		
+
+
 	}
 
-	}, false);
+	function send(){
+		//complete this function
+	}
+
+
+	var listePointsPolygone=[];
 
 	var mymap = L.map('mapid').setView([48.846659, 2.316756], 13);
 
@@ -129,7 +165,9 @@
 <footer class="container mt-4">
 	<div class="row">
 		<div class="col">
+			<p class="text-center"><b>IOT</b></a></p>
 			<p class="text-center"><b>Sorbonne Universit&eacute</b></a></p>
+
 		</div>
 	</div>
 </footer>
