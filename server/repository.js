@@ -17,7 +17,7 @@ const Promise = require('bluebird');
 var server = require('./serverSupervisor');
 
 var db;
-var pathDB = "db/database.db";
+var pathDB = "../db/database.db";
 
 function openDB(){
   // open the database
@@ -51,8 +51,8 @@ function getPatients(){
 
 function insertPatient(patient){
   //insert data
-  request = 'INSERT INTO Patients(id, name, lat, lng, OK) VALUES('+ patient.id + ', \'' + patient.name + '\', ' 
-		+ patient.lat + ', ' + patient.lng + ', ' + patient.OK +  ');' 
+  request = 'INSERT INTO Patients( name, lastName, lat, lng, polygone , OK) VALUES(\''+ patient.getName() + '\', \'' + patient.getLastName() + '\', ' 
+	+ patient.getLat() + ', ' + patient.getLng() + ', \'' + JSON.stringify(patient.getPolygon()) + '\', \'' + patient.getOK() +  '\');' 
 
   console.log(request);
   db.run(request, function(err) {

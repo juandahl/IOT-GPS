@@ -39,14 +39,47 @@ function onSocketConnected() {
 
 };
 
+function updateMap(event){
+//	var listePointsPolygone= patients[event.parentNode.parentNode.rowIndex].listePointsPolygone;
+	console.log(patients[event.parentNode.parentNode.rowIndex]);
 
-function showPatients(patients) {    
+	var mymap = L.map('mapid').setView([48.846659, 2.316756], 13);
+
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+
+	L.polygon([
+		[48.848170, 2.315833],
+		[48.846506, 2.320742],
+		[48.845729, 2.314809]
+	]).addTo(mymap);
+	var polygon = [
+		[48.848170, 2.315833],
+		[48.846506, 2.320742],
+		[48.845729, 2.314809]
+	];
+	var popup = L.popup();
+
+
+	alert("Ca marche");
+	alert(event.parentNode.parentNode.rowIndex);
+}
+
+function showPatients(patients) {
+	this.patients = patients;    
 	var html = "  <thead>"
 	html += "      <th scope=\"col\">ID</th>";
 	html += "      <th scope=\"col\">NAME</th>";
+	html += "      <th scope=\"col\">LAST NAME</th>";
 	html += "      <th scope=\"col\">LATITUD</th>";
 	html += "      <th scope=\"col\">LONGITUD</th>";
-	html += "      <th scope=\"col\">OK</th>";
+	html += "      <th scope=\"col\">POLYGON</th>";
+	html += "      <th scope=\"col\">LOCATION</th>";
 
 	html += "</tr>";
 	html += "</thead>";
@@ -54,8 +87,11 @@ function showPatients(patients) {
 		html+="<tr>";
 		html+="<td>"+patients[i].id+"</td>";
 		html+="<td>"+patients[i].name+"</td>";
+		html+="<td>"+patients[i].lastName+"</td>";
 		html+="<td>"+patients[i].lat+"</td>";
 		html+="<td>"+patients[i].lng+"</td>";
+		
+		html+="<td>"+"<button onclick=updateMap(this);>View Map</button>"+"</td>";
 		html+="<td>"+patients[i].OK+"</td>";
 		html+="</tr>";
 
@@ -63,8 +99,6 @@ function showPatients(patients) {
 	html+="</table>";
 	document.getElementById("tablePat").innerHTML = html;
 
-	console.log(patients.id + "\t" + patients.name + "\t" + patients.lat + "\t" + patients.lng + "\t" + patients.OK);
-//	console.log(patients[0].id + "\t" + patients[0].name + "\t" + patients[0].lat + "\t" + patients[0].lng + "\t" + patients[0].OK);
 };
 
 

@@ -44,19 +44,19 @@
 	<form>
 		<div class="row">
 			<div class="col">
-				<input type="text" class="form-control" placeholder="First name">
+				<input id="name" type="text" class="form-control" placeholder="First name">
 			</div>
 			<div class="col">
-				<input type="text" class="form-control" placeholder="Last name">
+				<input id="lastName" type="text" class="form-control" placeholder="Last name">
 			</div>
 		</div>
 		<br/>
 		<div class="row">
 				<div class="col">
-					<input id="lat" type="text" class="form-control" placeholder="Latitud">
+					<input id="lat" readonly= "true" type="text" class="form-control" placeholder="Latitud">
 				</div>
 				<div class="col">
-					<input id="lng" type="text" class="form-control" placeholder="Longitud">
+					<input id="lng" readonly= "true" type="text" class="form-control" placeholder="Longitud">
 				</div>
 		</div>
 		<br/>
@@ -80,7 +80,28 @@
 	
 	</form>
 	</div>
+<script src="socket.io/socket.io.js"></script>
+<script src="Patient.js"></script>
+
 <script>
+	var socket;
+function init() {
+
+	// Initialise socket connection
+	socket = io.connect();
+
+	// Start listening for events
+	setEventHandlers();
+};
+
+/**************************************************
+** GAME EVENT HANDLERS
+**************************************************/
+var setEventHandlers = function() {
+};
+
+
+
 	function showPolygon(){
 		console.log(JSON.stringify(listePointsPolygone));
 		console.log("polygone a creer");
@@ -125,7 +146,23 @@
 	}
 
 	function send(){
+		//variable declarations 
+		var name, lastName, lat, lng, OK, patient;
+
+		// Initialise the local patient
+		name = document.getElementById("name").value;
+		lastName = document.getElementById("lastName").value;
+		lat = document.getElementById("lat").value;
+		lng = document.getElementById("lng").value;
+		OK = document.getElementById("Inside").value;
+
+		patient = {"name":name, "lastName": lastName, "lat": lat, "lng":lng, "polygon": listePointsPolygone, "OK":OK };
+		console.log(patient);
 		//complete this function
+		
+		//send the patient to the server
+		socket.emit("new patient", patient);
+		socket.onNewPatient(patient);
 	}
 
 
@@ -156,7 +193,7 @@
 		document.getElementById("lng").value = pos.lng;
 	}
 	mymap.on('click', onMapClick);
-
+	init();
 </script>
 
 </div>

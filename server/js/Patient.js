@@ -38,7 +38,7 @@ var Patient = function(startName, startLastName, startLat, startLng, startPolygo
 
 	// Define which variables and methods can be accessed
 	return {
-		getName: getName,
+		getNom: getName,
 		getLastName: getLastName,
 		getLat: getLat,
 		getLng: getLng,
@@ -47,6 +47,3 @@ var Patient = function(startName, startLastName, startLat, startLng, startPolygo
 	}
 };
 
-// Export the Patient class so you can use it in
-// other files by using require("Patient").Patient
-exports.Patient = Patient;

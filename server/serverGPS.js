@@ -29,6 +29,10 @@ function init() {
 		res.sendFile(__dirname +  '/gpsClient.html');	  
 	});
 
+	app.get('/Patient.js',function(req,res){
+		res.sendFile(__dirname +  '/Patient.js');	  
+	});
+
 	server.listen(5000);
 
 
@@ -43,6 +47,7 @@ var setEventHandlers = function() {
 	// Socket.IO
 	//funcion callback es llamada cada vez que un cliente se conecta
 	socket.on("connection", onSocketConnection);
+	socket.on("new patient", onNewPatient);
 
 };
 
@@ -58,19 +63,22 @@ function onSocketConnection(client) {
 // New player has joined
 function onNewPatient(data) {
 	// Create a new player
-	var newPatient = new Patient(data.name, data.lastName, data.lat, data.lng, data.polygon, data.OK);
+	var patient = new Patient(data.name, data.lastName, data.lat, data.lng, data.polygon.toString(), data.OK);
+
+	console.log(patient.getName());
+	console.log(patient.getLastName());
 
 	console.log("onNewPatient");
-	console.log(data.name);
 		
 	// Add new player to the players array
-	console.log(patient);
 	patients.push(patient);
 
 	//insert on the database
+	repo.openDB();
 	repo.insertPatient(patient);
+	repo.close();
 
-	patients.push(newPatient);
+	patients.push(patient);
 };
 
 
