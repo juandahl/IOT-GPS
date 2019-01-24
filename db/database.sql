@@ -10,5 +10,5 @@ CREATE TABLE Patients (
     OK VARCHAR(255) NOT NULL
 );
 
-INSERT INTO Patients( name, lastName, lat, lng, polygone , OK) VALUES('Pepe', 'Perez', 43, 56, '[]', 'Inside');
+
 

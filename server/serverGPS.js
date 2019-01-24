@@ -63,7 +63,7 @@ function onSocketConnection(client) {
 // New player has joined
 function onNewPatient(data) {
 	// Create a new player
-	var patient = new Patient(data.name, data.lastName, data.lat, data.lng, data.polygon.toString(), data.OK);
+	var patient = new Patient(data.name, data.lastName, data.lat, data.lng, data.polygon, data.OK);
 
 	console.log(patient.getName());
 	console.log(patient.getLastName());

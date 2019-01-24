@@ -1,8 +1,8 @@
 // GAME VARIABLES
-var patients,	// list of patients
+var mymap,
+	patientsList,	// list of patients
     socket;	// Socket connection
-
-
+	
 
 // APP INITIALISATION
 function init() {
@@ -10,10 +10,11 @@ function init() {
 	socket = io.connect(this);
 
 	// Initialise remote players array
-	patients = [];
+	patientsList = [];
 
 	// Start listening for events
 	setEventHandlers();
+
 };
 
 
@@ -40,38 +41,30 @@ function onSocketConnected() {
 };
 
 function updateMap(event){
-//	var listePointsPolygone= patients[event.parentNode.parentNode.rowIndex].listePointsPolygone;
-	console.log(patients[event.parentNode.parentNode.rowIndex]);
+	mymap.remove();
+	mymap = L.map('mapid').setView([48.846659, 2.316756], 13);
 
-	var mymap = L.map('mapid').setView([48.846659, 2.316756], 13);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox.streets'
+	maxZoom: 18,
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	id: 'mapbox.streets'
 	}).addTo(mymap);
 
-	L.polygon([
-		[48.848170, 2.315833],
-		[48.846506, 2.320742],
-		[48.845729, 2.314809]
-	]).addTo(mymap);
-	var polygon = [
-		[48.848170, 2.315833],
-		[48.846506, 2.320742],
-		[48.845729, 2.314809]
-	];
-	var popup = L.popup();
+	var listePointsPolygone = JSON.parse(patientsList[event.parentNode.parentNode.rowIndex-1].polygone)
+	L.polygon(listePointsPolygone).addTo(mymap);
 
+	L.marker([patientsList[event.parentNode.parentNode.rowIndex-1].lat, patientsList[event.parentNode.parentNode.rowIndex-1].lng]).addTo(mymap);
 
-	alert("Ca marche");
-	alert(event.parentNode.parentNode.rowIndex);
+	document.getElementById('labelMap').innerHTML = ' Patient selected: ' + (event.parentNode.parentNode.rowIndex).toString() + ' - ' + patientsList[event.parentNode.parentNode.rowIndex-1].name 
+	+ ' ' + patientsList[event.parentNode.parentNode.rowIndex-1].lastName;
+
 }
 
 function showPatients(patients) {
-	this.patients = patients;    
+	patientsList = patients;
 	var html = "  <thead>"
 	html += "      <th scope=\"col\">ID</th>";
 	html += "      <th scope=\"col\">NAME</th>";
@@ -104,7 +97,7 @@ function showPatients(patients) {
 
 // New player
 function onNewPatient(patient) {
-	patients.push(patient);
+	patientsList.push(patient);
 	showPatients(patients)
 
 };

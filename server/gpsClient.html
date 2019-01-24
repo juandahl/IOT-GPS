@@ -36,49 +36,50 @@
 			</div>
 	</nav>
 
-	<div class="row">
-	
-	<div id="mapid" style="width: 600px; height: 400px;"></div>
-	<br/>
-
-	<form>
-		<div class="row">
-			<div class="col">
-				<input id="name" type="text" class="form-control" placeholder="First name">
-			</div>
-			<div class="col">
-				<input id="lastName" type="text" class="form-control" placeholder="Last name">
-			</div>
-		</div>
-		<br/>
-		<div class="row">
-				<div class="col">
-					<input id="lat" readonly= "true" type="text" class="form-control" placeholder="Latitud">
-				</div>
-				<div class="col">
-					<input id="lng" readonly= "true" type="text" class="form-control" placeholder="Longitud">
-				</div>
-		</div>
-		<br/>
-		<div class="row">
-			<div class="col">
-				<input id="Inside" readonly= "true" type="text" class="form-control" placeholder="Inside">
-			</div>
-		</div>
-		<br/>
-
-		<div class="col-auto">
-		</div>
-		<br/>
-	
-		<div class="col-auto">
-			<button type="submit" class="btn btn-primary mb-2" onclick="setLocation(); return false">Patient Location</button>
-			<button type="submit" class="btn btn-primary mb-2" onclick="showPolygon(); return false">Create Polygon</button>
-			<button type="submit" class="btn btn-primary mb-2" >Clean</button>
-			<button type="submit" class="btn btn-primary mb-2" onclick="send();">Send</button>
-		</div>
-	
-	</form>
+	<div class="row col-md-offset-1">
+				<div id="mapid" style="width: 600px; height: 400px;"></div>
+				<br/>
+			
+				<form class="col-md-offset-1">
+						<br/><br/><br/><br/>
+					<div class="row">
+						<div class="col">
+							<input id="name" type="text" class="form-control" placeholder="First name">
+						</div>
+						<div class="col">
+							<input id="lastName" type="text" class="form-control" placeholder="Last name">
+						</div>
+					</div>
+					<br/>
+					<div class="row">
+							<div class="col">
+								<input id="lat" readonly= "true" type="text" class="form-control" placeholder="Latitud">
+							</div>
+							<div class="col">
+								<input id="lng" readonly= "true" type="text" class="form-control" placeholder="Longitud">
+							</div>
+					</div>
+					<br/>
+					<div class="row">
+						<div class="col">
+							<input id="Inside" readonly= "true" type="text" class="form-control" placeholder="Inside">
+						</div>
+					</div>
+					<br/>
+			
+					<div class="col-auto">
+					</div>
+					<br/>
+				
+					<div class="col-auto">
+						<button type="submit" class="btn btn-primary mb-2" onclick="setLocation(); return false">Patient Location</button>
+						<button type="submit" class="btn btn-primary mb-2" onclick="showPolygon(); return false">Create Polygon</button>
+						<button type="submit" class="btn btn-primary mb-2" >Clean</button>
+						<button type="submit" class="btn btn-primary mb-2" onclick="send();">Send</button>
+					</div>
+				
+				</form>
+			
 	</div>
 <script src="socket.io/socket.io.js"></script>
 <script src="Patient.js"></script>
@@ -141,6 +142,8 @@ var setEventHandlers = function() {
 		console.log(JSON.stringify(listePointsPolygone));
 		console.log("polygone a creer");
 		L.polygon([listePointsPolygone]).addTo(mymap);
+
+		L.marker([pos.lat, pos.lng]).addTo(mymap);
 
 
 	}

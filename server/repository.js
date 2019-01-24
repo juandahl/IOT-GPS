@@ -51,6 +51,9 @@ function getPatients(){
 
 function insertPatient(patient){
   //insert data
+  var obj = JSON.stringify(patient.getPolygon());
+  console.log(patient.getPolygon());
+  
   request = 'INSERT INTO Patients( name, lastName, lat, lng, polygone , OK) VALUES(\''+ patient.getName() + '\', \'' + patient.getLastName() + '\', ' 
 	+ patient.getLat() + ', ' + patient.getLng() + ', \'' + JSON.stringify(patient.getPolygon()) + '\', \'' + patient.getOK() +  '\');' 
 
