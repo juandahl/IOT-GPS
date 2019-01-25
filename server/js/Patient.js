@@ -10,7 +10,7 @@ var Patient = function(startName, startLastName, startLat, startLng, startPolygo
 		polygon = startPolygon,
 		OK = startOK;
 
-	// Getters and setters
+	// Getters 
 	var getName = function() {
 		return name;
 	};

@@ -4,21 +4,17 @@ var util = require("util"),
     express = require("express"),
     app = express(),
     http = require("http"),
-    io = require("socket.io"),	
+	io = require("socket.io"),
     repo = require('./repository');
-
-module.exports = {
-  addPatient: addPatient,
-};
 
 // APP VARIABLES
 var socket,	// Socket controller
-    patients;	// Array of patients
+    patients,	// Array of patients
+ 	server;
 
 
 // APP INITIALISATION
 function init() {
-	// Create an empty array to store players
 	patients = [];
 
 	server=http.createServer(app); //crea el server
@@ -37,12 +33,13 @@ function init() {
 		res.sendFile(__dirname +  '/js/patientView.js');	  
 	});
 
+	//port
 	server.listen(8000);
-
 
 	// Start listening for events
 	setEventHandlers(); //fonction magic
 	console.log("server of monitoring started");
+
 };
 
 
@@ -64,15 +61,13 @@ function onSocketConnection(client) {
 
 	//get all the patients	
 	patients = onGetPatients();
-
-	patients = [];
 };
 
 function addPatient(patient) {
 	console.log(patient);
 	patients.push(patient);
 	socket.emit("show Patients", patients);
-}
+};
 
 
 function onGetPatients() {
@@ -86,6 +81,5 @@ function onGetPatients() {
 	});
 };
 
- 
 // RUN THE SERVER
 init();

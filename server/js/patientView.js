@@ -9,7 +9,7 @@ function init() {
 	// Initialise socket connection
 	socket = io.connect(this);
 
-	// Initialise remote players array
+	// Initialise remote patient array
 	patientsList = [];
 
 	// Start listening for events
@@ -26,12 +26,9 @@ var setEventHandlers = function() {
 	// New patient added
 	socket.on("new patient", onNewPatient);
 
-	// Player removed message received
-	socket.on("remove patient", onRemovePatient);
-
+	//show the table with information patients 
 	socket.on("show Patients", showPatients);
 };
-
 
 
 // Socket connected
@@ -41,10 +38,13 @@ function onSocketConnected() {
 };
 
 function updateMap(event){
+	//reset the map to avoid showing more than one patient for each time
 	mymap.remove();
+
+	//set map position in Paris
 	mymap = L.map('mapid').setView([48.846659, 2.316756], 13);
 
-
+	//api atributes
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 	maxZoom: 18,
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -53,17 +53,23 @@ function updateMap(event){
 	id: 'mapbox.streets'
 	}).addTo(mymap);
 
+	//get the polygon selected
 	var listePointsPolygone = JSON.parse(patientsList[event.parentNode.parentNode.rowIndex-1].polygone)
+	
+	//show the polygon on the map
 	L.polygon(listePointsPolygone).addTo(mymap);
 
+	//add a maker in the patient position
 	L.marker([patientsList[event.parentNode.parentNode.rowIndex-1].lat, patientsList[event.parentNode.parentNode.rowIndex-1].lng]).addTo(mymap);
 
+	//add information about the patient below the map
 	document.getElementById('labelMap').innerHTML = ' Patient selected: ' + (event.parentNode.parentNode.rowIndex).toString() + ' - ' + patientsList[event.parentNode.parentNode.rowIndex-1].name 
 	+ ' ' + patientsList[event.parentNode.parentNode.rowIndex-1].lastName;
 
 }
 
 function showPatients(patients) {
+	//code html to create the table dinamically
 	patientsList = patients;
 	var html = "  <thead>"
 	html += "      <th scope=\"col\">ID</th>";
@@ -95,30 +101,12 @@ function showPatients(patients) {
 };
 
 
-// New player
 function onNewPatient(patient) {
+	// New Patient
 	patientsList.push(patient);
 	showPatients(patients)
-
 };
 
-
-// Remove player
-function onRemovePatient(data) {
-	// Question : remove a player
-	//get player to be deleted
-	var removePlayer = playerById(data.id);
-
-	// Player not found
-	if (!removePlayer) {
-		util.log("Player not found: "+data.id);
-		return;
-	};
-
-	// Remove player from players array
-	players.splice(players.indexOf(removePlayer), 1);
-
-};
 
 //DIAGRAMA DE SECUENCIA UML
 //BASE DE DATOS

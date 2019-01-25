@@ -82,37 +82,23 @@
 			
 	</div>
 <script src="socket.io/socket.io.js"></script>
-<script src="Patient.js"></script>
 
 <script>
 	var socket;
-function init() {
 
-	// Initialise socket connection
-	socket = io.connect();
-
-	// Start listening for events
-	setEventHandlers();
-};
-
-/**************************************************
-** GAME EVENT HANDLERS
-**************************************************/
-var setEventHandlers = function() {
-};
-
-
+	function init() {
+		// Initialise socket connection
+		socket = io.connect();
+	};
 
 	function showPolygon(){
-		console.log(JSON.stringify(listePointsPolygone));
-		console.log("polygone a creer");
+		//show polygon on the map
 		L.polygon([listePointsPolygone]).addTo(mymap);
 	};
 
 	function inside(point, vs) {
-		// ray-casting algorithm based on
-		// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-
+		//define if the point is inside or outside of the polygon
+		//point to eval
 		var x = point.lat, y = point.lng;
 
 		var inside = false;
@@ -124,7 +110,8 @@ var setEventHandlers = function() {
 				&& (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
 			if (intersect) inside = !inside;
 		}
-		console.log("inside: " + inside); 
+
+		// add the result on the label
 		if (inside) 
 			document.getElementById("Inside").value = "Inside";
 		else
@@ -132,20 +119,21 @@ var setEventHandlers = function() {
 	};
 
 
-
 	function setLocation(){
+		//get the last point added
 		var pos = listePointsPolygone[listePointsPolygone.length-1];
+		
+		//remove the patient position from the list
 		listePointsPolygone.pop(listePointsPolygone.length-1);
 
+		//eval the patient position
 		inside(pos, listePointsPolygone);
 
-		console.log(JSON.stringify(listePointsPolygone));
-		console.log("polygone a creer");
+		//show the polygon on the map
 		L.polygon([listePointsPolygone]).addTo(mymap);
-
+		
+		//add a maker on the patient position
 		L.marker([pos.lat, pos.lng]).addTo(mymap);
-
-
 	}
 
 	function send(){
@@ -159,16 +147,15 @@ var setEventHandlers = function() {
 		lng = document.getElementById("lng").value;
 		OK = document.getElementById("Inside").value;
 
+		//create the objet to be sent
 		patient = {"name":name, "lastName": lastName, "lat": lat, "lng":lng, "polygon": listePointsPolygone, "OK":OK };
-		console.log(patient);
-		//complete this function
 		
 		//send the patient to the server
 		socket.emit("new patient", patient);
 		socket.onNewPatient(patient);
-	}
+	};
 
-
+	//show the map empty at the beginning
 	var listePointsPolygone=[];
 
 	var mymap = L.map('mapid').setView([48.846659, 2.316756], 13);
@@ -184,17 +171,23 @@ var setEventHandlers = function() {
 	var popup = L.popup();
 
 	function onMapClick(e) {
+		//show the point selected
 		popup
 			.setLatLng(e.latlng)
 			.setContent("You moved at " + e.latlng.toString())
 			.openOn(mymap);
+	
+		//create an object with the position	
 		var pos={lat:e.latlng.lat,lng:e.latlng.lng};
-		var patient = {id: 2, name:"Pepe", lat: pos.lat, lng: pos.lng, polygone: listePointsPolygone, OK: 1 };
+		
+		//add the point to the list
 		listePointsPolygone.push(pos);
-
+		
+		//show the last point selected on the labels
 		document.getElementById("lat").value = pos.lat;
 		document.getElementById("lng").value = pos.lng;
 	}
+	
 	mymap.on('click', onMapClick);
 	init();
 </script>

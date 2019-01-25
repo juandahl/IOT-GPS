@@ -12,15 +12,19 @@ var util = require("util"),
 // APP VARIABLES
 var socket;	// Socket controller
 var patients;
+var server;
 
 // APP INITIALISATION
 function init() {
 	patients = [];
 
-	server=http.createServer(app); //crea el server
+	//crea el server
+	server=http.createServer(app); 
+	
 	// Set up Socket.IO to listen on port 8000
 	socket = io.listen(server); //permite usar websocket
 
+	//returns html code to render the website
 	app.get('/',function(req,res){
 		res.sendFile(__dirname +  '/gpsClient.html');	  
 	});
@@ -33,6 +37,7 @@ function init() {
 		res.sendFile(__dirname +  '/Patient.js');	  
 	});
 
+	//port
 	server.listen(5000);
 
 
@@ -60,17 +65,14 @@ function onSocketConnection(client) {
 
 };
 
-// New player has joined
+// New patient has joined
 function onNewPatient(data) {
-	// Create a new player
+	// Create a new patient
 	var patient = new Patient(data.name, data.lastName, data.lat, data.lng, data.polygon, data.OK);
-
-	console.log(patient.getName());
-	console.log(patient.getLastName());
 
 	console.log("onNewPatient");
 		
-	// Add new player to the players array
+	// Add new player to the patients array
 	patients.push(patient);
 
 	//insert on the database
@@ -78,10 +80,9 @@ function onNewPatient(data) {
 	repo.insertPatient(patient);
 	repo.close();
 
-	patients.push(patient);
 };
 
 
  
-// RUN THE GAME
+// RUN THE SERVER
 init();

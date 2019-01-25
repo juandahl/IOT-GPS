@@ -13,9 +13,6 @@ module.exports = {
 const sqlite3 = require('sqlite3').verbose();
 const Promise = require('bluebird');
 
-
-var server = require('./serverSupervisor');
-
 var db;
 var pathDB = "../db/database.db";
 
@@ -33,8 +30,11 @@ function openDB(){
 function getPatients(){
     listePatients = [];
     openDB();
+
+    //sql request
     sql = "SELECT * FROM Patients";
 
+    //use promise to solve async problems
     return new Promise(function(resolve, reject) {
       // Do async job
       db.all(sql, function(err, rows) {
@@ -50,20 +50,16 @@ function getPatients(){
 
 
 function insertPatient(patient){
-  //insert data
-  var obj = JSON.stringify(patient.getPolygon());
-  console.log(patient.getPolygon());
-  
+  //insert data  
   request = 'INSERT INTO Patients( name, lastName, lat, lng, polygone , OK) VALUES(\''+ patient.getName() + '\', \'' + patient.getLastName() + '\', ' 
 	+ patient.getLat() + ', ' + patient.getLng() + ', \'' + JSON.stringify(patient.getPolygon()) + '\', \'' + patient.getOK() +  '\');' 
 
-  console.log(request);
   db.run(request, function(err) {
     if (err) {
       return console.log(err.message);
     }
-    // get the last insert id
-    console.log('A row has been inserted with rowid ${patient.id}');
+    // get the last insert name
+    console.log('A row has been inserted with rowid ${patient.getName()} ${patient.getLastName()}');
   });
 }
 
